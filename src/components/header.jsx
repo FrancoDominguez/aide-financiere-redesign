@@ -2,10 +2,8 @@ import React from "react";
 
 const Header = () => {
   return (
-    <header className="bg-blue-600 w-full h-[128px] text-white py-4">
-      <h1 className="text-3xl font-bold text-center">
-        Aide Financière Redesign
-      </h1>
+    <header className="bg-white w-full text-white py-4 border-b border-b-gray-200">
+      <img src="/qc-logo.svg" alt="QC Logo" className="mx-auto h-14"/>
     </header>
   );
 };
