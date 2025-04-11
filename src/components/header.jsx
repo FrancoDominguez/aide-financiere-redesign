@@ -2,7 +2,7 @@ import React from "react";
 
 const Header = () => {
   return (
-    <header className="bg-blue-600 text-white py-4">
+    <header className="bg-blue-600 w-full h-[128px] text-white py-4">
       <h1 className="text-3xl font-bold text-center">
         Aide Financière Redesign
       </h1>
