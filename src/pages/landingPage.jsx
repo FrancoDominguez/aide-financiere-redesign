@@ -33,52 +33,50 @@ function LandingPage() {
   }
 
   return (
-    <main className="flex-grow container mx-auto p-6 bg-white rounded-lg shadow-md flex items-center justify-center">
-      <div style={{ width: "100%" }}>
-        <PageTitle />
-        <div>
-          <h1 className="font-bold text-2xl mb-2 text-[#235893]">
-            Notifications
-          </h1>
-          <ButtonGroup
-            orientation="vertical"
-            aria-label="Vertical button group"
-            variant="text"
-            sx={{
-              width: "100%",
-              borderRadius: "12px",
-              overflow: "hidden",
-              "& .MuiButtonGroup-grouped:not(:last-of-type)": {
-                borderBottom: "1px solid darkgrey",
-              },
-            }}
-          >
-            {createButtons(notifications)}
-          </ButtonGroup>
-        </div>
-
-        <div className="mt-10">
-          <h1 className="font-bold text-2xl mb-2 text-[#235893]">
-            Notifications
-          </h1>
-          <ButtonGroup
-            orientation="vertical"
-            aria-label="Vertical button group"
-            variant="text"
-            sx={{
-              width: "100%",
-              borderRadius: "12px",
-              overflow: "hidden",
-              "& .MuiButtonGroup-grouped:not(:last-of-type)": {
-                borderBottom: "1px solid darkgrey",
-              },
-            }}
-          >
-            {createButtons(applications)}
-          </ButtonGroup>
-        </div>
+    <div style={{ width: "100%" }}>
+      <PageTitle title={"Hello, Jon Smith"} />
+      <div>
+        <h1 className="font-bold text-2xl mb-2 text-[#235893]">
+          Notifications
+        </h1>
+        <ButtonGroup
+          orientation="vertical"
+          aria-label="Vertical button group"
+          variant="text"
+          sx={{
+            width: "100%",
+            borderRadius: "12px",
+            overflow: "hidden",
+            "& .MuiButtonGroup-grouped:not(:last-of-type)": {
+              borderBottom: "1px solid darkgrey",
+            },
+          }}
+        >
+          {createButtons(notifications)}
+        </ButtonGroup>
       </div>
-    </main>
+
+      <div className="mt-10">
+        <h1 className="font-bold text-2xl mb-2 text-[#235893]">
+          Notifications
+        </h1>
+        <ButtonGroup
+          orientation="vertical"
+          aria-label="Vertical button group"
+          variant="text"
+          sx={{
+            width: "100%",
+            borderRadius: "12px",
+            overflow: "hidden",
+            "& .MuiButtonGroup-grouped:not(:last-of-type)": {
+              borderBottom: "1px solid darkgrey",
+            },
+          }}
+        >
+          {createButtons(applications)}
+        </ButtonGroup>
+      </div>
+    </div>
   );
 }
 
