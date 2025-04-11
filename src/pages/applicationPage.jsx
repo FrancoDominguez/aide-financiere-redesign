@@ -81,13 +81,13 @@ const textFieldConfig = [
       {
         type: 'toggle',
         label: "Will you be doing full-time studies?",
-        value: 'resideSponsorParent',
+        value: 'fulltimeStudies',
         options: ['Yes', 'No']
       },
       {
         type: 'toggle',
         label: "Did you or will you reside at your parents' or sponsor's residence?",
-        value: 'resideSponsorParent',
+        value: 'liveWithParent',
         options: ['Yes', 'No']
       }
     ]

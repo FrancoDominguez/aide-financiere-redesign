@@ -7,6 +7,7 @@ import LoginPage from "./pages/loginPage";
 import MyAccountPage from "./pages/myAccountPage";
 import SignupPage from "./pages/signupPage";
 import LandingPage from "./pages/landingPage";
+import MyApplicationsPage from "./pages/myApplicationsPage";
 import ApplicationPage from "./pages/applicationPage";
 import { useAuth } from "./context/AuthContext";
 
@@ -62,6 +63,11 @@ function App() {
           <Route path="/my-account" element={
             <ProtectedRoute>
               <MyAccountPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/my-applications" element={
+            <ProtectedRoute>
+              <MyApplicationsPage />
             </ProtectedRoute>
           } />
           <Route path="/application" element={

@@ -38,7 +38,6 @@ const AppDrawer = ({ open, toggleDrawer }) => {
       return [
         { text: "Home", href: "/landing", icon: <Home /> },
         { text: "My Account", href: "/my-account", icon: <AccountCircle /> },
-        { text: "Application", href: "/application", icon: <Description /> },
       ];
     } else {
       return [
