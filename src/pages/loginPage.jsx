@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 import TextField from "@mui/material/TextField";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
@@ -7,6 +8,8 @@ import FormControl from "@mui/material/FormControl";
 import { Button } from "@mui/material";
 
 const LoginPage = () => {
+  const navigate = useNavigate(); // Initialize useNavigate
+
   return (
     <main className="flex-grow container mx-auto p-6 bg-white rounded-lg shadow-md flex items-center justify-center">
       <div className="flex flex-col space-y-4 w-full">
@@ -46,9 +49,12 @@ const LoginPage = () => {
             style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
           >
             <span>Don't have an account?</span>
-            <a className="text-blue-600" href="/signup">
-              Log In
-            </a>
+            <button
+              className="text-blue-600 underline"
+              onClick={() => navigate("/signup")} // Use navigate to redirect
+            >
+              Sign Up
+            </button>
           </span>
         </FormControl>
       </div>
