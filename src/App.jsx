@@ -3,6 +3,8 @@ import Header from "./components/header";
 import Footer from "./components/footer";
 import LoginPage from "./pages/loginPage";
 import ApplicationPage from "./pages/applicationPage";
+import MyAccountPage from "./pages/myAccountPage";
+import SignupPage from "./pages/signupPage";
 
 function App() {
   return (
@@ -12,7 +14,8 @@ function App() {
         <Routes>
           <Route path="/" element={<LoginPage />} />
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/application" element={<ApplicationPage />} />
+          <Route path="/signup" element={<SignupPage />} />
+          <Route path="/my-account" element={<MyAccountPage />} />
         </Routes>
       </main>
       <Footer />
