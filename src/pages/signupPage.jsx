@@ -6,35 +6,29 @@ import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import { Button } from "@mui/material";
 
-const LoginPage = () => {
-  const [age, setAge] = useState("");
-
-  const handleChange = (event) => {
-    setAge(event.target.value);
-  };
+const SignupPage = () => {
   return (
     <main className="flex-grow container mx-auto p-6 bg-white rounded-lg shadow-md flex items-center justify-center">
       <div className="flex flex-col space-y-4 w-full">
-        <heading className="text-3xl font-bold pb-4">Log In</heading>
+        <heading className="text-xl font-bold pb-4">Sign Up</heading>
         <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
           <InputLabel id="demo-select-small-label">Student</InputLabel>
           <Select
-            labelId="demo-select-small-label"
-            id="demo-select-small"
-            onChange={handleChange}
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            label="Student"
             sx={{ mb: 5 }}
           >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-            <MenuItem value={"student"}>Student</MenuItem>
-            <MenuItem value={"parent"}>Parent</MenuItem>
+            <MenuItem value={10}>Ten</MenuItem>
+            <MenuItem value={20}>Twenty</MenuItem>
+            <MenuItem value={30}>Thirty</MenuItem>
           </Select>
+
           <TextField
             className="mb-8"
             label="Permanent Code / Social Insurance Number"
-            placeholder="enter your number"
             id="outlined-size-small"
+            placeholder="Enter your number"
             size="small"
             fullWidth
             sx={{ mb: 5 }}
@@ -47,13 +41,21 @@ const LoginPage = () => {
             fullWidth
             sx={{ mb: 5 }}
           />
-          <Button variant="contained">Log In</Button>
+          <TextField
+            label="Confirm Password"
+            id="outlined-size-small"
+            placeholder="enter password"
+            size="small"
+            fullWidth
+            sx={{ mb: 5 }}
+          />
+          <Button variant="contained">Sign Up</Button>
           <span
             style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
           >
             <span>Don't have an account?</span>
             <a className="text-blue-600" href="/signup">
-              Log In
+              Sign Up
             </a>
           </span>
         </FormControl>
@@ -61,3 +63,5 @@ const LoginPage = () => {
     </main>
   );
 };
+
+export default SignupPage;
