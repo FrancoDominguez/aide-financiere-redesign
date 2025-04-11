@@ -2,8 +2,25 @@ import * as React from "react";
 import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import { useNavigate, useLocation } from "react-router-dom";
 
 export default function MyApplicationsPage() {
+const navigate = useNavigate();
+const location = useLocation();
+
+const searchParams = new URLSearchParams(location.search);
+const typeParam = searchParams.get("type");
+
+const titleMap = {
+partTime: "Part-Time Loans",
+fullTime: "Full-Time Loans",
+specialNeeds: "Special Needs Loans",
+internScholarship: "Intern Scholarship",
+perspectiveScholarship: "Québec Perspective Scholarship"
+};
+
+const title = titleMap[typeParam || ""] || "My Applications";
+
 const installments = [
     { date: "March 10, 2025", amount: "$1025.43" },
     { date: "April 10, 2025", amount: "$1025.37" },
@@ -38,13 +55,13 @@ const installments = [
   ));
 
   return (
-    <div className="m-auto max-w-[400px]">
+    <div className="m-auto max-w-[640px]">
       <div className="text-center text-3xl text-[#263652] font-bold">
-        <h1>Loans and Bursaries</h1>
-        <h1>Full-Time Studies</h1>
+        <h1>{title}</h1>
       </div>
 
           <Button
+            onClick={() => navigate('/application?type=' + typeParam)}
             fullWidth
             sx={{
                 mt: '20px',
@@ -64,7 +81,7 @@ const installments = [
             <ArrowForwardIosIcon sx={{ mr: 1, fontSize: 16, color: "#FFFFFF" }} />
         </Button>
 
-      <div className="mt-[20px] bg-white rounded-xl border border-gray-200 shadow-sm max-w-md mx-auto">
+      <div className="mt-[20px] bg-white rounded-xl border border-gray-200 shadow-sm mx-auto">
         <table className="w-full text-sm text-left text-gray-700">
             <thead>
             <tr className="text-[#263652] border-b border-gray-200">

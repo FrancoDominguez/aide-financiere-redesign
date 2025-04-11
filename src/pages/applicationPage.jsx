@@ -5,6 +5,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import { useLocation } from "react-router-dom";
 
 const textFieldConfig = [
   {
@@ -95,8 +96,22 @@ const textFieldConfig = [
 ];
 
 export default function ApplicationPage() {
+  const location = useLocation();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [alignments, setAlignments] = useState({});
+
+  const searchParams = new URLSearchParams(location.search);
+  const typeParam = searchParams.get("type");
+
+  const titleMap = {
+    partTime: "Part-Time Loans",
+    fullTime: "Full-Time Loans",
+    specialNeeds: "Special Needs Loans",
+    internScholarship: "Intern Scholarship",
+    perspectiveScholarship: "Québec Perspective Scholarship"
+    };
+    
+  const title = titleMap[typeParam || ""] + " Application" || "Application";
 
   const handleAlignment = (key) => (event, newValue) => {
     setAlignments(prev => ({
@@ -121,10 +136,10 @@ export default function ApplicationPage() {
     <div>
       <div className="text-center text-3xl text-[#263652] font-bold">
         <h1>Loans and Bursaries</h1>
-        <h1>Full-Time Studies Application</h1>
+        <h1>{title}</h1>
       </div>
 
-      <div className="w-full m-auto max-w-[400px] mb-9">
+      <div className="w-full m-auto max-w-[640px] mb-9">
         <h1 className="mt-4 text-lg text-[#263652] font-bold">{textFieldConfig[currentIndex].title}</h1>
         <h1 className="mt-2 text-base text-[#263652] font-bold opacity-70">{textFieldConfig[currentIndex].description}</h1>
         {textFieldConfig[currentIndex].fields.map((field, index) => {
@@ -221,7 +236,7 @@ export default function ApplicationPage() {
           <Button
             onClick={handleNext}
             variant="outlined"
-            endIcon={<ArrowForwardIcon />}
+            endIcon={currentIndex !== 2 ? <ArrowForwardIcon /> : <span></span>}
             sx={{
               width: 136,
               color: '#263652',
@@ -237,7 +252,7 @@ export default function ApplicationPage() {
               },
             }}
           >
-            Next
+            {currentIndex === 2 ? 'Submit' : 'Next'}
           </Button>
         </div>
       </div>

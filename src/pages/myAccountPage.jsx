@@ -30,24 +30,29 @@ function MyAccountPage() {
         pl: 2,
       }}
     >
-      {label}
-      <ArrowForwardIosIcon sx={{ fontSize: 16, color: "gray" }} />
+        <span className="capitalize">
+            {label}
+        </span>
+      <ArrowForwardIosIcon sx={{ mr: 1, fontSize: 16, color: "#263652" }} />
     </Button>
   ));
 
   return (
-    <div style={{ width: "100%" }}>
-      <h1 className="text-3xl text-center mb-7 text-[#263652]">My Account</h1>
+    <div className="w-full max-w-[640px] m-auto">
+      <div className="text-center text-3xl text-[#263652] font-bold">
+        <h1>My Account</h1>
+      </div>
       <ButtonGroup
         orientation="vertical"
         aria-label="Vertical button group"
         variant="text"
         sx={{
+          mt: '20px',
           width: "100%",
           borderRadius: "12px",
           overflow: "hidden",
           "& .MuiButtonGroup-grouped:not(:last-of-type)": {
-            borderBottom: "1px solid darkgrey",
+            borderBottom: "1px solid #cdcdcd",
           },
         }}
       >

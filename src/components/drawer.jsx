@@ -12,16 +12,6 @@ import {
   Avatar,
   ListItemIcon,
 } from "@mui/material";
-import {
-  Home,
-  AccountCircle,
-  ExitToApp,
-  Login,
-  PersonAdd,
-  Description,
-  ListAlt,
-  Assignment
-} from "@mui/icons-material";
 import { useAuth } from "../context/AuthContext";
 
 const AppDrawer = ({ open, toggleDrawer }) => {
@@ -38,15 +28,17 @@ const AppDrawer = ({ open, toggleDrawer }) => {
   const getMenuItems = () => {
     if (isAuthenticated) {
       return [
-        { text: "Home", href: "/landing", icon: <Home /> },
-        { text: "My Account", href: "/my-account", icon: <AccountCircle /> },
-        { text: "My Applications", href: "/my-applications", icon: <ListAlt /> },
-        { text: "Application", href: "/application", icon: <Assignment /> },
+        { text: "Home", href: "/landing" },
+        { text: "Part-Time Loans", href: "/my-applications?type=partTime" },
+        { text: "Full-Time Loans", href: "/my-applications?type=fullTime" },
+        { text: "Special Needs Loans", href: "/my-applications?type=specialNeeds" },
+        { text: "Intern Scholarship", href: "/my-applications?type=internScholarship" },
+        { text: "Québec Perspective Scholarship", href: "/my-applications?type=perspectiveScholarship" },
       ];
     } else {
       return [
-        { text: "Login", href: "/login", icon: <Login /> },
-        { text: "Sign Up", href: "/signup", icon: <PersonAdd /> },
+        { text: "Login", href: "/login" },
+        { text: "Sign Up", href: "/signup" },
       ];
     }
   };
@@ -141,6 +133,25 @@ const AppDrawer = ({ open, toggleDrawer }) => {
               />
               <ListItem disablePadding>
                 <ListItemButton
+                  onClick={() => { navigate('my-account'); toggleDrawer(false)(); }}
+                  sx={{
+                    py: 2,
+                    "&:hover": {
+                      backgroundColor: "rgba(255, 255, 255, 0.1)",
+                    },
+                  }}
+                >
+                  <ListItemText
+                    primary="My Account"
+                    primaryTypographyProps={{
+                      fontSize: "1.1rem",
+                      fontWeight: "medium",
+                    }}
+                  />
+                </ListItemButton>
+              </ListItem>
+              <ListItem disablePadding>
+                <ListItemButton
                   onClick={handleLogout}
                   sx={{
                     py: 2,
@@ -149,9 +160,6 @@ const AppDrawer = ({ open, toggleDrawer }) => {
                     },
                   }}
                 >
-                  <ListItemIcon sx={{ color: "white", minWidth: 40 }}>
-                    <ExitToApp />
-                  </ListItemIcon>
                   <ListItemText
                     primary="Logout"
                     primaryTypographyProps={{

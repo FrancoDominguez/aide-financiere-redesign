@@ -4,9 +4,11 @@ import ButtonGroup from "@mui/material/ButtonGroup";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import PageTitle from "../components/pageTitle";
 import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 function LandingPage() {
   // Get current user from auth context
+  const navigate = useNavigate();
   const { currentUser } = useAuth();
   
   // Extract name from current user data
@@ -14,15 +16,16 @@ function LandingPage() {
   const lastName = currentUser?.lastName || "";
   const fullName = `${firstName} ${lastName}`.trim();
   
-  const notifications = ["Notification 1", "Notification 2"];
+  const notifications = [{ label: "Notification 1" },{ label: "Notification 2" }];
   const applications = [
-    "My full time loan application",
-    "My bursary application",
+    { label: "My full-time loan applications", href: '/my-applications?type=fullTime' },
+    { label: "My Québec Perspective Sscholarship applications", href: '/my-applications?type=perspectiveScholarship' }
   ];
 
   function createButtons(buttons) {
-    return buttons.map((label, index) => (
+    return buttons.map((item, index) => (
       <Button
+        onClick={() => navigate(item.href)}
         key={index}
         fullWidth
         sx={{
@@ -35,17 +38,22 @@ function LandingPage() {
           pl: 2,
         }}
       >
-        {label}
-        <ArrowForwardIosIcon sx={{ fontSize: 16, color: "gray" }} />
+        <span className="capitalize">
+            {item.label}
+        </span>
+      <ArrowForwardIosIcon sx={{ mr: 1, fontSize: 16, color: "#263652" }} />
       </Button>
     ));
   }
 
   return (
-    <div style={{ width: "100%" }}>
-      <PageTitle title={`Hello, ${fullName}`} />
-      <div>
-        <h1 className="font-bold text-2xl mb-2 text-[#235893]">
+    <div className="w-full max-w-[640px] m-auto">
+      <div className="text-center text-3xl text-[#263652] font-bold">
+        <h1>Hello, {fullName}</h1>
+      </div>
+
+      <div className="mt-[20px]">
+        <h1 className="text-lg text-[#263652] font-bold">
           Notifications
         </h1>
         <ButtonGroup
@@ -53,11 +61,12 @@ function LandingPage() {
           aria-label="Vertical button group"
           variant="text"
           sx={{
+            mt: '8px',
             width: "100%",
             borderRadius: "12px",
             overflow: "hidden",
             "& .MuiButtonGroup-grouped:not(:last-of-type)": {
-              borderBottom: "1px solid darkgrey",
+              borderBottom: "1px solid #cdcdcd",
             },
           }}
         >
@@ -65,8 +74,8 @@ function LandingPage() {
         </ButtonGroup>
       </div>
 
-      <div className="mt-10">
-        <h1 className="font-bold text-2xl mb-2 text-[#235893]">
+      <div className="mt-[20px]">
+      <h1 className="text-lg text-[#263652] font-bold">
           Applications
         </h1>
         <ButtonGroup
@@ -74,11 +83,12 @@ function LandingPage() {
           aria-label="Vertical button group"
           variant="text"
           sx={{
+            mt: '8px',
             width: "100%",
             borderRadius: "12px",
             overflow: "hidden",
             "& .MuiButtonGroup-grouped:not(:last-of-type)": {
-              borderBottom: "1px solid darkgrey",
+              borderBottom: "1px solid #cdcdcd",
             },
           }}
         >
