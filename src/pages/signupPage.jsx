@@ -17,47 +17,47 @@ const SignupPage = () => {
     email: "",
     idNumber: "",
     password: "",
-    confirmPassword: ""
+    confirmPassword: "",
   });
-  
+
   const [errors, setErrors] = useState({});
   const [showSuccess, setShowSuccess] = useState(false);
   const [showAdmin, setShowAdmin] = useState(false);
-  
+
   // Handle input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: value
+      [name]: value,
     });
-    
+
     // Clear error when field is modified
     if (errors[name]) {
       setErrors({
         ...errors,
-        [name]: null
+        [name]: null,
       });
     }
   };
-  
+
   // Secret admin mode - click 5 times on heading to show the export button
   const handleHeadingClick = () => {
     if (!showAdmin) {
-      let clicks = parseInt(localStorage.getItem('adminClicks') || '0');
+      let clicks = parseInt(localStorage.getItem("adminClicks") || "0");
       clicks++;
-      localStorage.setItem('adminClicks', clicks.toString());
-      
+      localStorage.setItem("adminClicks", clicks.toString());
+
       if (clicks >= 5) {
         setShowAdmin(true);
       }
     }
   };
-  
+
   // Validate the form
   const validateForm = () => {
     const newErrors = {};
-    
+
     if (!formData.userType) newErrors.userType = "Please select user type";
     if (!formData.firstName) newErrors.firstName = "First name is required";
     if (!formData.lastName) newErrors.lastName = "Last name is required";
@@ -75,15 +75,15 @@ const SignupPage = () => {
     if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = "Passwords do not match";
     }
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-  
+
   // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+
     if (validateForm()) {
       // Prepare user data
       const userData = {
@@ -93,15 +93,15 @@ const SignupPage = () => {
         email: formData.email,
         idNumber: formData.idNumber,
         password: formData.password,
-        createdAt: new Date().toISOString()
+        createdAt: new Date().toISOString(),
       };
-      
+
       // Save user to local storage
       const success = saveUser(userData);
-      
+
       if (success) {
         setShowSuccess(true);
-        
+
         // Reset form
         setFormData({
           userType: "",
@@ -110,9 +110,9 @@ const SignupPage = () => {
           email: "",
           idNumber: "",
           password: "",
-          confirmPassword: ""
+          confirmPassword: "",
         });
-        
+
         // Redirect to login page after 2 seconds
         setTimeout(() => {
           navigate("/login");
@@ -120,30 +120,35 @@ const SignupPage = () => {
       }
     }
   };
-  
+
   return (
     <main className="flex-grow container mx-auto p-6 bg-white rounded-lg shadow-md flex items-center justify-center">
       <div className="flex flex-col space-y-4 w-full max-w-md">
-        <heading 
+        <heading
           className="text-xl font-bold pb-4"
           onClick={handleHeadingClick}
         >
           Sign Up
         </heading>
-        
+
         {showAdmin && (
-          <Button 
-            variant="outlined" 
-            color="secondary" 
+          <Button
+            variant="outlined"
+            color="secondary"
             onClick={exportUsersToFile}
             sx={{ mb: 2 }}
           >
             Export Users Data
           </Button>
         )}
-        
+
         <form onSubmit={handleSubmit}>
-          <FormControl fullWidth sx={{ mb: 2 }} size="small" error={!!errors.userType}>
+          <FormControl
+            fullWidth
+            sx={{ mb: 2 }}
+            size="small"
+            error={!!errors.userType}
+          >
             <InputLabel id="user-type-label">User Type</InputLabel>
             <Select
               labelId="user-type-label"
@@ -157,7 +162,9 @@ const SignupPage = () => {
               <MenuItem value="parent">Parent</MenuItem>
               <MenuItem value="advisor">Advisor</MenuItem>
             </Select>
-            {errors.userType && <span className="text-red-500 text-xs">{errors.userType}</span>}
+            {errors.userType && (
+              <span className="text-red-500 text-xs">{errors.userType}</span>
+            )}
           </FormControl>
 
           <TextField
@@ -172,7 +179,7 @@ const SignupPage = () => {
             error={!!errors.firstName}
             helperText={errors.firstName}
           />
-          
+
           <TextField
             label="Last Name"
             name="lastName"
@@ -185,7 +192,7 @@ const SignupPage = () => {
             error={!!errors.lastName}
             helperText={errors.lastName}
           />
-          
+
           <TextField
             label="Email"
             name="email"
@@ -199,7 +206,7 @@ const SignupPage = () => {
             error={!!errors.email}
             helperText={errors.email}
           />
-          
+
           <TextField
             label="Permanent Code / Social Insurance Number"
             name="idNumber"
@@ -212,7 +219,7 @@ const SignupPage = () => {
             error={!!errors.idNumber}
             helperText={errors.idNumber}
           />
-          
+
           <TextField
             label="Password"
             name="password"
@@ -226,7 +233,7 @@ const SignupPage = () => {
             error={!!errors.password}
             helperText={errors.password}
           />
-          
+
           <TextField
             label="Confirm Password"
             name="confirmPassword"
@@ -240,16 +247,11 @@ const SignupPage = () => {
             error={!!errors.confirmPassword}
             helperText={errors.confirmPassword}
           />
-          
-          <Button 
-            variant="contained" 
-            fullWidth 
-            type="submit"
-            sx={{ mb: 2 }}
-          >
+
+          <Button variant="contained" fullWidth type="submit" sx={{ mb: 2 }}>
             Sign Up
           </Button>
-          
+
           <div className="flex items-center justify-center gap-2 mt-2">
             <span>Already have an account?</span>
             <a className="text-blue-600 hover:underline" href="/login">
@@ -258,18 +260,18 @@ const SignupPage = () => {
           </div>
         </form>
       </div>
-      
+
       {/* Success message */}
-      <Snackbar 
-        open={showSuccess} 
-        autoHideDuration={6000} 
+      <Snackbar
+        open={showSuccess}
+        autoHideDuration={6000}
         onClose={() => setShowSuccess(false)}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
       >
-        <Alert 
-          onClose={() => setShowSuccess(false)} 
-          severity="success" 
-          sx={{ width: '100%' }}
+        <Alert
+          onClose={() => setShowSuccess(false)}
+          severity="success"
+          sx={{ width: "100%" }}
         >
           Account created successfully! Redirecting to login...
         </Alert>
