@@ -36,6 +36,11 @@ const LoginPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!formData.userType) {
+      setError("Please select a user type");
+      return;
+    }
+    
     if (!formData.identifier || !formData.password) {
       setError("Please enter both identifier and password");
       return;
@@ -45,8 +50,8 @@ const LoginPage = () => {
     setError("");
 
     try {
-      // Attempt to login
-      const user = await login(formData.identifier, formData.password);
+      // Attempt to login with user type
+      const user = await login(formData.identifier, formData.password, formData.userType);
 
       if (user) {
         // Redirect to the page they were trying to access, or landing page
@@ -75,7 +80,7 @@ const LoginPage = () => {
         )}
 
         <form onSubmit={handleSubmit}>
-          <FormControl fullWidth sx={{ mb: 2 }} size="small">
+          <FormControl fullWidth sx={{ mb: 3 }} size="small" required>
             <InputLabel id="user-type-label">User Type</InputLabel>
             <Select
               labelId="user-type-label"
@@ -84,6 +89,7 @@ const LoginPage = () => {
               value={formData.userType}
               onChange={handleChange}
               label="User Type"
+              required
             >
               <MenuItem value="">
                 <em>Select Type</em>
@@ -124,12 +130,12 @@ const LoginPage = () => {
             type="submit"
             fullWidth
             disabled={loading}
-            sx={{ mb: 2 }}
+            sx={{ mb: 3 }}
           >
             {loading ? "Logging in..." : "Log In"}
           </Button>
 
-          <div className="flex items-center justify-center gap-2 mt-2">
+          <div className="flex items-center justify-center gap-2">
             <span>Don't have an account?</span>
             <button
               type="button"

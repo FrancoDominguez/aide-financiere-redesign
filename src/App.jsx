@@ -8,7 +8,7 @@ import MyAccountPage from "./pages/myAccountPage";
 import SignupPage from "./pages/signupPage";
 import LandingPage from "./pages/landingPage";
 import ApplicationPage from "./pages/applicationPage";
-import { AuthProvider, useAuth } from "./context/AuthContext";
+import { useAuth } from "./context/AuthContext";
 
 // Protected route component
 const ProtectedRoute = ({ children }) => {
@@ -26,7 +26,7 @@ const ProtectedRoute = ({ children }) => {
   return children;
 };
 
-function AppContent() {
+function App() {
   const [open, setOpen] = useState(false);
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
@@ -76,14 +76,6 @@ function AppContent() {
       </main>
       <Footer />
     </div>
-  );
-}
-
-function App() {
-  return (
-    <AuthProvider>
-      <AppContent />
-    </AuthProvider>
   );
 }
 

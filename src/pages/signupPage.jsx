@@ -124,12 +124,9 @@ const SignupPage = () => {
   return (
     <main className="flex-grow container mx-auto p-6 bg-white rounded-lg shadow-md flex items-center justify-center">
       <div className="flex flex-col space-y-4 w-full max-w-md">
-        <heading
-          className="text-xl font-bold pb-4"
-          onClick={handleHeadingClick}
-        >
+        <h1 className="text-xl font-bold pb-4" onClick={handleHeadingClick}>
           Sign Up
-        </heading>
+        </h1>
 
         {showAdmin && (
           <Button

@@ -1,11 +1,27 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { getCurrentUser, loginUser, logoutUser } from '../utils/userStorage';
 
+// Default context value
+const defaultContextValue = {
+  currentUser: null,
+  loading: false,
+  login: () => Promise.resolve(null),
+  logout: () => {},
+  isAuthenticated: false
+};
+
 // Create the auth context
-const AuthContext = createContext(null);
+const AuthContext = createContext(defaultContextValue);
 
 // Custom hook to use the auth context
-export const useAuth = () => useContext(AuthContext);
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    console.warn("useAuth must be used within an AuthProvider");
+    return defaultContextValue;
+  }
+  return context;
+};
 
 // Auth provider component
 export const AuthProvider = ({ children }) => {
@@ -14,27 +30,41 @@ export const AuthProvider = ({ children }) => {
 
   // Check for logged in user on mount
   useEffect(() => {
-    const user = getCurrentUser();
-    if (user) {
-      setCurrentUser(user);
+    try {
+      const user = getCurrentUser();
+      if (user) {
+        setCurrentUser(user);
+      }
+    } catch (error) {
+      console.error("Error loading user from storage:", error);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   }, []);
 
   // Login function
-  const login = async (identifier, password) => {
-    const user = loginUser(identifier, password);
-    if (user) {
-      setCurrentUser(user);
-      return user;
+  const login = async (identifier, password, userType) => {
+    try {
+      const user = loginUser(identifier, password, userType);
+      if (user) {
+        setCurrentUser(user);
+        return user;
+      }
+      return null;
+    } catch (error) {
+      console.error("Login error:", error);
+      return null;
     }
-    return null;
   };
 
   // Logout function
   const logout = () => {
-    logoutUser();
-    setCurrentUser(null);
+    try {
+      logoutUser();
+      setCurrentUser(null);
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
   };
 
   // Auth context value
@@ -48,7 +78,7 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider value={value}>
-      {!loading && children}
+      {children}
     </AuthContext.Provider>
   );
 };

@@ -64,15 +64,18 @@ export const saveUser = (user) => {
  * Login a user by email/idNumber and password
  * @param {string} identifier Email or ID number
  * @param {string} password User password
+ * @param {string} userType User type (student, parent, advisor)
  * @returns {Object|null} User data if login successful, null otherwise
  */
-export const loginUser = (identifier, password) => {
+export const loginUser = (identifier, password, userType) => {
   try {
     const users = getUsers();
     
-    // Find user by email or idNumber
+    // Find user by email or idNumber, password, and matching userType
     const user = users.find(
-      u => (u.email === identifier || u.idNumber === identifier) && u.password === password
+      u => (u.email === identifier || u.idNumber === identifier) && 
+           u.password === password && 
+           (!userType || u.userType === userType)
     );
     
     if (user) {

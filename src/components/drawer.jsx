@@ -65,14 +65,31 @@ const AppDrawer = ({ open, toggleDrawer }) => {
       {/* User profile section if logged in */}
       {isAuthenticated && currentUser && (
         <Box sx={{ p: 2, display: 'flex', alignItems: 'center', gap: 2 }}>
-          <Avatar sx={{ bgcolor: 'white', color: '#235893' }}>
+          <Avatar sx={{ bgcolor: 'white', color: '#235893', flexShrink: 0 }}>
             {currentUser.firstName?.charAt(0) || currentUser.email?.charAt(0) || "U"}
           </Avatar>
-          <Box>
-            <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
+          <Box sx={{ minWidth: 0, width: '100%' }}>
+            <Typography 
+              variant="subtitle1" 
+              sx={{ 
+                fontWeight: 'bold',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis'
+              }}
+            >
               {currentUser.firstName} {currentUser.lastName}
             </Typography>
-            <Typography variant="body2" sx={{ opacity: 0.8 }}>
+            <Typography 
+              variant="body2" 
+              sx={{ 
+                opacity: 0.8,
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis'
+              }}
+              title={currentUser.email} // Add tooltip showing full email on hover
+            >
               {currentUser.email}
             </Typography>
           </Box>
