@@ -11,7 +11,7 @@ import { saveUser, exportUsersToFile } from "../utils/userStorage";
 const SignupPage = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    userType: "",
+    userType: "~",
     firstName: "",
     lastName: "",
     email: "",
@@ -59,12 +59,12 @@ const SignupPage = () => {
         permanentCode: "",
         relationship: formData.relationship || "parent",
       }));
-    } else if (formData.userType === "spouse") {
-      // If spouse, clear permanent code
+    } else if (formData.userType === "sponsor") {
+      // If sponsor, clear permanent code
       setFormData((prev) => ({
         ...prev,
         permanentCode: "",
-        relationship: "spouse",
+        relationship: "sponsor",
       }));
     }
   }, [formData.userType]);
@@ -104,7 +104,7 @@ const SignupPage = () => {
       }
     } else if (
       formData.userType === "parent" ||
-      formData.userType === "spouse"
+      formData.userType === "sponsor"
     ) {
       if (!formData.sin) {
         newErrors.sin = "Social Insurance Number is required";
@@ -156,8 +156,8 @@ const SignupPage = () => {
         userData.idType = "sin";
         if (formData.userType === "parent") {
           userData.relationship = formData.relationship;
-        } else if (formData.userType === "spouse") {
-          userData.relationship = "spouse";
+        } else if (formData.userType === "sponsor") {
+          userData.relationship = "sponsor";
         }
       }
 
@@ -200,7 +200,22 @@ const SignupPage = () => {
           placeholder="e.g., ABCD12345678"
           size="small"
           fullWidth
-          sx={{ mb: 2 }}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          sx={{
+            mt: '20px',
+            '& .MuiOutlinedInput-root': {
+              borderRadius: '8px',
+              height: 56,
+            },
+            '& .MuiInputBase-input': {
+              padding: '20px 24px',
+              boxSizing: 'border-box',
+              display: 'flex',
+              alignItems: 'center',
+            },
+          }}
           error={!!errors.permanentCode}
           helperText={errors.permanentCode}
           inputProps={{ style: { textTransform: "uppercase" } }}
@@ -208,7 +223,7 @@ const SignupPage = () => {
       );
     } else if (
       formData.userType === "parent" ||
-      formData.userType === "spouse"
+      formData.userType === "sponsor"
     ) {
       return (
         <>
@@ -220,7 +235,22 @@ const SignupPage = () => {
             placeholder="e.g., 123456789"
             size="small"
             fullWidth
-            sx={{ mb: 2 }}
+            InputLabelProps={{
+              shrink: true,
+            }}
+            sx={{
+              mt: '20px',
+              '& .MuiOutlinedInput-root': {
+                borderRadius: '8px',
+                height: 56,
+              },
+              '& .MuiInputBase-input': {
+                padding: '20px 24px',
+                boxSizing: 'border-box',
+                display: 'flex',
+                alignItems: 'center',
+              },
+            }}
             error={!!errors.sin}
             helperText={errors.sin}
           />
@@ -228,7 +258,19 @@ const SignupPage = () => {
           {formData.userType === "parent" && (
             <FormControl
               fullWidth
-              sx={{ mb: 2 }}
+              sx={{
+                mt: '20px',
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: '8px',
+                  height: 56,
+                },
+                '& .MuiSelect-select': {
+                  padding: '20px 24px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  boxSizing: 'border-box',
+                },
+              }}
               size="small"
               error={!!errors.relationship}
             >
@@ -254,11 +296,11 @@ const SignupPage = () => {
   };
 
   return (
-    <main className="flex-grow container mx-auto p-6 bg-white rounded-lg shadow-md flex items-center justify-center">
+    <main className="flex-grow container mx-auto p-6 bg-white flex items-center justify-center">
       <div className="flex flex-col space-y-4 w-full max-w-md">
-        <h1 className="text-xl font-bold pb-4" onClick={handleHeadingClick}>
-          Sign Up
-        </h1>
+        <div className="text-center text-3xl text-[#263652] font-bold">
+          <h1 onClick={handleHeadingClick}>Login</h1>
+        </div>
 
         {showAdmin && (
           <Button
@@ -274,10 +316,22 @@ const SignupPage = () => {
         <form onSubmit={handleSubmit}>
           <FormControl
             fullWidth
-            sx={{ mb: 2 }}
             size="small"
             error={!!errors.userType}
             required
+            sx={{
+              mt: '20px',
+              '& .MuiOutlinedInput-root': {
+                borderRadius: '8px',
+                height: 56,
+              },
+              '& .MuiSelect-select': {
+                padding: '20px 24px',
+                display: 'flex',
+                alignItems: 'center',
+                boxSizing: 'border-box',
+              },
+            }}
           >
             <InputLabel id="user-type-label">User Type</InputLabel>
             <Select
@@ -288,10 +342,12 @@ const SignupPage = () => {
               onChange={handleChange}
               label="User Type"
             >
+              <MenuItem value="~" disabled>
+                <span style={{color: '#afafaf' }}>Select a user type</span>
+              </MenuItem>
               <MenuItem value="student">Student</MenuItem>
               <MenuItem value="parent">Parent</MenuItem>
-              <MenuItem value="spouse">Spouse</MenuItem>
-              <MenuItem value="advisor">Advisor</MenuItem>
+              <MenuItem value="sponsor">Sponsor</MenuItem>
             </Select>
             {errors.userType && (
               <FormHelperText>{errors.userType}</FormHelperText>
@@ -300,45 +356,89 @@ const SignupPage = () => {
 
           <TextField
             label="First Name"
-            name="firstName"
+            placeholder="Enter your first name"
             value={formData.firstName}
             onChange={handleChange}
-            placeholder="Enter your first name"
+            name="firstName"
             size="small"
-            fullWidth
-            sx={{ mb: 2 }}
             error={!!errors.firstName}
             helperText={errors.firstName}
-            required
+            fullWidth
+            variant="outlined"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            sx={{
+              mt: '20px',
+              '& .MuiOutlinedInput-root': {
+                borderRadius: '8px',
+                height: 56,
+              },
+              '& .MuiInputBase-input': {
+                padding: '20px 24px',
+                boxSizing: 'border-box',
+                display: 'flex',
+                alignItems: 'center',
+              },
+            }}
           />
 
           <TextField
             label="Last Name"
-            name="lastName"
+            placeholder="Enter your last name"
             value={formData.lastName}
             onChange={handleChange}
-            placeholder="Enter your last name"
+            name="lastName"
             size="small"
-            fullWidth
-            sx={{ mb: 2 }}
             error={!!errors.lastName}
             helperText={errors.lastName}
-            required
+            fullWidth
+            variant="outlined"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            sx={{
+              mt: '20px',
+              '& .MuiOutlinedInput-root': {
+                borderRadius: '8px',
+                height: 56,
+              },
+              '& .MuiInputBase-input': {
+                padding: '20px 24px',
+                boxSizing: 'border-box',
+                display: 'flex',
+                alignItems: 'center',
+              },
+            }}
           />
 
           <TextField
             label="Email"
-            name="email"
-            type="email"
+            placeholder="Enter your email"
             value={formData.email}
             onChange={handleChange}
-            placeholder="Enter your email"
+            name="email"
             size="small"
-            fullWidth
-            sx={{ mb: 2 }}
             error={!!errors.email}
             helperText={errors.email}
-            required
+            fullWidth
+            variant="outlined"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            sx={{
+              mt: '20px',
+              '& .MuiOutlinedInput-root': {
+                borderRadius: '8px',
+                height: 56,
+              },
+              '& .MuiInputBase-input': {
+                padding: '20px 24px',
+                boxSizing: 'border-box',
+                display: 'flex',
+                alignItems: 'center',
+              },
+            }}
           />
 
           {/* Conditional identity field based on user type */}
@@ -346,39 +446,85 @@ const SignupPage = () => {
 
           <TextField
             label="Password"
-            name="password"
-            type="password"
+            placeholder="Enter your password"
             value={formData.password}
             onChange={handleChange}
-            placeholder="Enter password"
+            name="password"
+            type="password"
             size="small"
-            fullWidth
-            sx={{ mb: 2 }}
             error={!!errors.password}
             helperText={errors.password}
-            required
+            fullWidth
+            variant="outlined"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            sx={{
+              mt: '20px',
+              '& .MuiOutlinedInput-root': {
+                borderRadius: '8px',
+                height: 56,
+              },
+              '& .MuiInputBase-input': {
+                padding: '20px 24px',
+                boxSizing: 'border-box',
+                display: 'flex',
+                alignItems: 'center',
+              },
+            }}
           />
+
 
           <TextField
             label="Confirm Password"
-            name="confirmPassword"
-            type="password"
+            placeholder="Confirm password"
             value={formData.confirmPassword}
             onChange={handleChange}
-            placeholder="Confirm password"
+            name="confirmPassword"
+            type="password"
             size="small"
-            fullWidth
-            sx={{ mb: 3 }}
             error={!!errors.confirmPassword}
             helperText={errors.confirmPassword}
-            required
+            fullWidth
+            variant="outlined"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            sx={{
+              mt: '20px',
+              '& .MuiOutlinedInput-root': {
+                borderRadius: '8px',
+                height: 56,
+              },
+              '& .MuiInputBase-input': {
+                padding: '20px 24px',
+                boxSizing: 'border-box',
+                display: 'flex',
+                alignItems: 'center',
+              },
+            }}
           />
 
-          <Button variant="contained" fullWidth type="submit" sx={{ mb: 2 }}>
-            Sign Up
+          <Button
+            fullWidth
+            type="submit"
+            sx={{
+                mt: '20px',
+                height: 60,
+                backgroundColor: "#235893",
+                color: "#FFFFFF",
+                fontWeight: "bold",
+                justifyContent: "space-between",
+                borderRadius: '12px',
+                pl: 2,
+            }}
+            >
+                <div className="capitalize w-full text-center">
+                  Sign Up
+                </div>
           </Button>
 
-          <div className="flex items-center justify-center gap-2">
+          <div className="flex mt-[20px] items-center justify-center gap-2">
             <span>Don't have an account?</span>
             <button
               type="button"

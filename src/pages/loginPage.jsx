@@ -16,7 +16,7 @@ const LoginPage = () => {
   const [formData, setFormData] = useState({
     identifier: "",
     password: "",
-    userType: "",
+    userType: "~",
   });
 
   const [error, setError] = useState("");
@@ -24,6 +24,7 @@ const LoginPage = () => {
 
   // Handle input changes
   const handleChange = (e) => {
+    console.log(e)
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -73,9 +74,11 @@ const LoginPage = () => {
   };
 
   return (
-    <main className="flex-grow container mx-auto p-6 bg-white rounded-lg shadow-md flex items-center justify-center">
+    <main className="flex-grow container mx-auto p-6 bg-white rounded-lg flex items-center justify-center">
       <div className="flex flex-col space-y-4 w-full max-w-md">
-        <h1 className="text-3xl font-bold pb-4">Log In</h1>
+      <div className="text-center text-3xl text-[#263652] font-bold">
+        <h1>Login</h1>
+      </div>
 
         {error && (
           <Alert severity="error" sx={{ mb: 2 }}>
@@ -84,33 +87,49 @@ const LoginPage = () => {
         )}
 
         <form onSubmit={handleSubmit}>
-          <FormControl fullWidth sx={{ mb: 3 }} size="small" required>
-            <InputLabel id="user-type-label">User Type</InputLabel>
-            <Select
-              labelId="user-type-label"
-              id="user-type"
-              name="userType"
-              value={formData.userType}
-              onChange={handleChange}
-              label="User Type"
-              required
-            >
-              <MenuItem value="">
-                <em>Select Type</em>
+        <FormControl
+          fullWidth
+          required
+          sx={{
+            mt: '20px',
+            '& .MuiOutlinedInput-root': {
+              borderRadius: '8px',
+              height: 56,
+            },
+            '& .MuiSelect-select': {
+              padding: '20px 24px',
+              display: 'flex',
+              alignItems: 'center',
+              boxSizing: 'border-box',
+            },
+          }}
+        >
+          <InputLabel id="user-type-label" shrink>
+            User Type
+          </InputLabel>
+          <Select
+            labelId="user-type-label"
+            id="user-type"
+            name="userType"
+            value={formData.userType}
+            onChange={handleChange}
+            label="User Type"
+          >
+              <MenuItem value="~" disabled>
+                <span style={{color: '#afafaf' }}>Select a user type</span>
               </MenuItem>
-              <MenuItem value="student">Student</MenuItem>
-              <MenuItem value="parent">Parent</MenuItem>
-              <MenuItem value="spouse">Spouse</MenuItem>
-              <MenuItem value="advisor">Advisor</MenuItem>
-            </Select>
-          </FormControl>
+            <MenuItem value="student">Student</MenuItem>
+            <MenuItem value="parent">Parent</MenuItem>
+            <MenuItem value="sponsor">Sponsor</MenuItem>
+          </Select>
+        </FormControl>
 
           <TextField
             label={
               formData.userType === "student"
                 ? "Email or Permanent Code"
                 : formData.userType === "parent" ||
-                  formData.userType === "spouse"
+                  formData.userType === "sponsor"
                 ? "Email or SIN"
                 : "Email or ID"
             }
@@ -121,40 +140,80 @@ const LoginPage = () => {
               formData.userType === "student"
                 ? "Enter your email or permanent code"
                 : formData.userType === "parent" ||
-                  formData.userType === "spouse"
+                  formData.userType === "sponsor"
                 ? "Enter your email or SIN"
                 : "Enter your email or ID number"
             }
             size="small"
             fullWidth
-            sx={{ mb: 3 }}
-            required
+            variant="outlined"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            sx={{
+              mt: '20px',
+              '& .MuiOutlinedInput-root': {
+                borderRadius: '8px',
+                height: 56,
+              },
+              '& .MuiInputBase-input': {
+                padding: '20px 24px',
+                boxSizing: 'border-box',
+                display: 'flex',
+                alignItems: 'center',
+              },
+            }}
           />
 
           <TextField
             label="Password"
-            name="password"
-            type="password"
+            placeholder="Enter your password"
             value={formData.password}
             onChange={handleChange}
-            placeholder="Enter password"
+            name="password"
             size="small"
+            type="password"
             fullWidth
-            sx={{ mb: 3 }}
-            required
+            variant="outlined"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            sx={{
+              mt: '20px',
+              '& .MuiOutlinedInput-root': {
+                borderRadius: '8px',
+                height: 56,
+              },
+              '& .MuiInputBase-input': {
+                padding: '20px 24px',
+                boxSizing: 'border-box',
+                display: 'flex',
+                alignItems: 'center',
+              },
+            }}
           />
 
           <Button
-            variant="contained"
-            type="submit"
             fullWidth
             disabled={loading}
-            sx={{ mb: 3 }}
-          >
-            {loading ? "Logging in..." : "Log In"}
+            type="submit"
+            sx={{
+                mt: '20px',
+                height: 60,
+                backgroundColor: "#235893",
+                color: "#FFFFFF",
+                fontWeight: "bold",
+                justifyContent: "space-between",
+                borderRadius: '12px',
+                pl: 2,
+            }}
+            >
+                <div className="capitalize w-full text-center">
+                  {loading ? "Logging in..." : "Log In"}
+                </div>
           </Button>
 
-          <div className="flex items-center justify-center gap-2">
+          <div className="mt-[20px] flex items-center justify-center gap-2">
             <span>Don't have an account?</span>
             <button
               type="button"
