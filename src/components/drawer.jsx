@@ -19,25 +19,29 @@ import {
   Login,
   PersonAdd,
   Description,
+  ListAlt,
+  Assignment
 } from "@mui/icons-material";
 import { useAuth } from "../context/AuthContext";
 
 const AppDrawer = ({ open, toggleDrawer }) => {
   const { currentUser, logout, isAuthenticated } = useAuth();
   const navigate = useNavigate();
-  
+
   const handleLogout = () => {
     logout();
     toggleDrawer(false)();
     navigate("/login");
   };
-  
+
   // Define menu items based on authentication status
   const getMenuItems = () => {
     if (isAuthenticated) {
       return [
         { text: "Home", href: "/landing", icon: <Home /> },
         { text: "My Account", href: "/my-account", icon: <AccountCircle /> },
+        { text: "My Applications", href: "/my-applications", icon: <ListAlt /> },
+        { text: "Application", href: "/application", icon: <Assignment /> },
       ];
     } else {
       return [
@@ -46,7 +50,7 @@ const AppDrawer = ({ open, toggleDrawer }) => {
       ];
     }
   };
-  
+
   const menuItems = getMenuItems();
 
   return (
@@ -63,29 +67,31 @@ const AppDrawer = ({ open, toggleDrawer }) => {
     >
       {/* User profile section if logged in */}
       {isAuthenticated && currentUser && (
-        <Box sx={{ p: 2, display: 'flex', alignItems: 'center', gap: 2 }}>
-          <Avatar sx={{ bgcolor: 'white', color: '#235893', flexShrink: 0 }}>
-            {currentUser.firstName?.charAt(0) || currentUser.email?.charAt(0) || "U"}
+        <Box sx={{ p: 2, display: "flex", alignItems: "center", gap: 2 }}>
+          <Avatar sx={{ bgcolor: "white", color: "#235893", flexShrink: 0 }}>
+            {currentUser.firstName?.charAt(0) ||
+              currentUser.email?.charAt(0) ||
+              "U"}
           </Avatar>
-          <Box sx={{ minWidth: 0, width: '100%' }}>
-            <Typography 
-              variant="subtitle1" 
-              sx={{ 
-                fontWeight: 'bold',
-                whiteSpace: 'nowrap',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis'
+          <Box sx={{ minWidth: 0, width: "100%" }}>
+            <Typography
+              variant="subtitle1"
+              sx={{
+                fontWeight: "bold",
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
               }}
             >
               {currentUser.firstName} {currentUser.lastName}
             </Typography>
-            <Typography 
-              variant="body2" 
-              sx={{ 
+            <Typography
+              variant="body2"
+              sx={{
                 opacity: 0.8,
-                whiteSpace: 'nowrap',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis'
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
               }}
               title={currentUser.email} // Add tooltip showing full email on hover
             >
@@ -94,7 +100,7 @@ const AppDrawer = ({ open, toggleDrawer }) => {
           </Box>
         </Box>
       )}
-      
+
       <Box sx={{ pt: 2, pb: 2 }}>
         <List>
           {menuItems.map((item, index) => (
@@ -126,11 +132,13 @@ const AppDrawer = ({ open, toggleDrawer }) => {
               </ListItemButton>
             </ListItem>
           ))}
-          
+
           {/* Logout button - only show when authenticated */}
           {isAuthenticated && (
             <>
-              <Divider sx={{ my: 1.5, backgroundColor: 'rgba(255, 255, 255, 0.2)' }} />
+              <Divider
+                sx={{ my: 1.5, backgroundColor: "rgba(255, 255, 255, 0.2)" }}
+              />
               <ListItem disablePadding>
                 <ListItemButton
                   onClick={handleLogout}

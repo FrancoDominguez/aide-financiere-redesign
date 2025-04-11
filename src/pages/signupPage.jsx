@@ -47,24 +47,24 @@ const SignupPage = () => {
   useEffect(() => {
     if (formData.userType === "student") {
       // If student, clear SIN and relationship
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
         sin: "",
-        relationship: ""
+        relationship: "",
       }));
     } else if (formData.userType === "parent") {
       // If parent, clear permanent code
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
         permanentCode: "",
-        relationship: formData.relationship || "parent"
+        relationship: formData.relationship || "parent",
       }));
     } else if (formData.userType === "spouse") {
       // If spouse, clear permanent code
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
         permanentCode: "",
-        relationship: "spouse"
+        relationship: "spouse",
       }));
     }
   }, [formData.userType]);
@@ -94,7 +94,7 @@ const SignupPage = () => {
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = "Email is invalid";
     }
-    
+
     // Validate identity fields based on user type
     if (formData.userType === "student") {
       if (!formData.permanentCode) {
@@ -102,25 +102,28 @@ const SignupPage = () => {
       } else if (!/^[A-Z]{4}\d{8}$/.test(formData.permanentCode)) {
         newErrors.permanentCode = "Permanent Code format: AAAA12345678";
       }
-    } else if (formData.userType === "parent" || formData.userType === "spouse") {
+    } else if (
+      formData.userType === "parent" ||
+      formData.userType === "spouse"
+    ) {
       if (!formData.sin) {
         newErrors.sin = "Social Insurance Number is required";
       } else if (!/^\d{9}$/.test(formData.sin)) {
         newErrors.sin = "SIN must be 9 digits";
       }
-      
+
       if (formData.userType === "parent" && !formData.relationship) {
         newErrors.relationship = "Please specify relationship";
       }
     }
-    
+
     // Password validation
     if (!formData.password) {
       newErrors.password = "Password is required";
     } else if (formData.password.length < 6) {
       newErrors.password = "Password must be at least 6 characters";
     }
-    
+
     if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = "Passwords do not match";
     }
@@ -200,10 +203,13 @@ const SignupPage = () => {
           sx={{ mb: 2 }}
           error={!!errors.permanentCode}
           helperText={errors.permanentCode}
-          inputProps={{ style: { textTransform: 'uppercase' } }}
+          inputProps={{ style: { textTransform: "uppercase" } }}
         />
       );
-    } else if (formData.userType === "parent" || formData.userType === "spouse") {
+    } else if (
+      formData.userType === "parent" ||
+      formData.userType === "spouse"
+    ) {
       return (
         <>
           <TextField
@@ -218,9 +224,14 @@ const SignupPage = () => {
             error={!!errors.sin}
             helperText={errors.sin}
           />
-          
+
           {formData.userType === "parent" && (
-            <FormControl fullWidth sx={{ mb: 2 }} size="small" error={!!errors.relationship}>
+            <FormControl
+              fullWidth
+              sx={{ mb: 2 }}
+              size="small"
+              error={!!errors.relationship}
+            >
               <InputLabel>Relationship to Student</InputLabel>
               <Select
                 name="relationship"
@@ -367,11 +378,15 @@ const SignupPage = () => {
             Sign Up
           </Button>
 
-          <div className="flex items-center justify-center gap-2 mt-2">
-            <span>Already have an account?</span>
-            <a className="text-blue-600 hover:underline" href="/login">
-              Log In
-            </a>
+          <div className="flex items-center justify-center gap-2">
+            <span>Don't have an account?</span>
+            <button
+              type="button"
+              className="text-blue-600 hover:underline"
+              onClick={() => navigate("/login")}
+            >
+              Login
+            </button>
           </div>
         </form>
       </div>

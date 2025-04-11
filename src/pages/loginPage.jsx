@@ -40,7 +40,7 @@ const LoginPage = () => {
       setError("Please select a user type");
       return;
     }
-    
+
     if (!formData.identifier || !formData.password) {
       setError("Please enter both identifier and password");
       return;
@@ -51,7 +51,11 @@ const LoginPage = () => {
 
     try {
       // Attempt to login with user type
-      const user = await login(formData.identifier, formData.password, formData.userType);
+      const user = await login(
+        formData.identifier,
+        formData.password,
+        formData.userType
+      );
 
       if (user) {
         // Redirect to the page they were trying to access, or landing page
@@ -102,15 +106,25 @@ const LoginPage = () => {
           </FormControl>
 
           <TextField
-            label={formData.userType === "student" ? "Email or Permanent Code" : 
-                  formData.userType === "parent" || formData.userType === "spouse" ? "Email or SIN" : 
-                  "Email or ID"}
+            label={
+              formData.userType === "student"
+                ? "Email or Permanent Code"
+                : formData.userType === "parent" ||
+                  formData.userType === "spouse"
+                ? "Email or SIN"
+                : "Email or ID"
+            }
             name="identifier"
             value={formData.identifier}
             onChange={handleChange}
-            placeholder={formData.userType === "student" ? "Enter your email or permanent code" : 
-                        formData.userType === "parent" || formData.userType === "spouse" ? "Enter your email or SIN" : 
-                        "Enter your email or ID number"}
+            placeholder={
+              formData.userType === "student"
+                ? "Enter your email or permanent code"
+                : formData.userType === "parent" ||
+                  formData.userType === "spouse"
+                ? "Enter your email or SIN"
+                : "Enter your email or ID number"
+            }
             size="small"
             fullWidth
             sx={{ mb: 3 }}
