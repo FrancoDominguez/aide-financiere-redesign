@@ -96,16 +96,21 @@ const LoginPage = () => {
               </MenuItem>
               <MenuItem value="student">Student</MenuItem>
               <MenuItem value="parent">Parent</MenuItem>
+              <MenuItem value="spouse">Spouse</MenuItem>
               <MenuItem value="advisor">Advisor</MenuItem>
             </Select>
           </FormControl>
 
           <TextField
-            label="Email or Permanent Code / SIN"
+            label={formData.userType === "student" ? "Email or Permanent Code" : 
+                  formData.userType === "parent" || formData.userType === "spouse" ? "Email or SIN" : 
+                  "Email or ID"}
             name="identifier"
             value={formData.identifier}
             onChange={handleChange}
-            placeholder="Enter your email or ID number"
+            placeholder={formData.userType === "student" ? "Enter your email or permanent code" : 
+                        formData.userType === "parent" || formData.userType === "spouse" ? "Enter your email or SIN" : 
+                        "Enter your email or ID number"}
             size="small"
             fullWidth
             sx={{ mb: 3 }}

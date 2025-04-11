@@ -3,8 +3,17 @@ import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import PageTitle from "../components/pageTitle";
+import { useAuth } from "../context/AuthContext";
 
 function LandingPage() {
+  // Get current user from auth context
+  const { currentUser } = useAuth();
+  
+  // Extract name from current user data
+  const firstName = currentUser?.firstName || "User";
+  const lastName = currentUser?.lastName || "";
+  const fullName = `${firstName} ${lastName}`.trim();
+  
   const notifications = ["Notification 1", "Notification 2"];
   const applications = [
     "My full time loan application",
@@ -34,7 +43,7 @@ function LandingPage() {
 
   return (
     <div style={{ width: "100%" }}>
-      <PageTitle title={"Hello, Jon Smith"} />
+      <PageTitle title={`Hello, ${fullName}`} />
       <div>
         <h1 className="font-bold text-2xl mb-2 text-[#235893]">
           Notifications
@@ -58,7 +67,7 @@ function LandingPage() {
 
       <div className="mt-10">
         <h1 className="font-bold text-2xl mb-2 text-[#235893]">
-          Notifications
+          Applications
         </h1>
         <ButtonGroup
           orientation="vertical"

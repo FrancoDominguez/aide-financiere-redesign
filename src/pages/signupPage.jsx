@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import TextField from "@mui/material/TextField";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
-import { Button, Alert, Snackbar } from "@mui/material";
+import { Button, Alert, Snackbar, FormHelperText } from "@mui/material";
 import { saveUser, exportUsersToFile } from "../utils/userStorage";
 
 const SignupPage = () => {
@@ -15,9 +15,11 @@ const SignupPage = () => {
     firstName: "",
     lastName: "",
     email: "",
-    idNumber: "",
+    permanentCode: "",
+    sin: "",
     password: "",
     confirmPassword: "",
+    relationship: "",
   });
 
   const [errors, setErrors] = useState({});
@@ -40,6 +42,32 @@ const SignupPage = () => {
       });
     }
   };
+
+  // Reset irrelevant fields when user type changes
+  useEffect(() => {
+    if (formData.userType === "student") {
+      // If student, clear SIN and relationship
+      setFormData(prev => ({
+        ...prev,
+        sin: "",
+        relationship: ""
+      }));
+    } else if (formData.userType === "parent") {
+      // If parent, clear permanent code
+      setFormData(prev => ({
+        ...prev,
+        permanentCode: "",
+        relationship: formData.relationship || "parent"
+      }));
+    } else if (formData.userType === "spouse") {
+      // If spouse, clear permanent code
+      setFormData(prev => ({
+        ...prev,
+        permanentCode: "",
+        relationship: "spouse"
+      }));
+    }
+  }, [formData.userType]);
 
   // Secret admin mode - click 5 times on heading to show the export button
   const handleHeadingClick = () => {
@@ -66,12 +94,33 @@ const SignupPage = () => {
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = "Email is invalid";
     }
-    if (!formData.idNumber) newErrors.idNumber = "ID number is required";
+    
+    // Validate identity fields based on user type
+    if (formData.userType === "student") {
+      if (!formData.permanentCode) {
+        newErrors.permanentCode = "Permanent Code is required";
+      } else if (!/^[A-Z]{4}\d{8}$/.test(formData.permanentCode)) {
+        newErrors.permanentCode = "Permanent Code format: AAAA12345678";
+      }
+    } else if (formData.userType === "parent" || formData.userType === "spouse") {
+      if (!formData.sin) {
+        newErrors.sin = "Social Insurance Number is required";
+      } else if (!/^\d{9}$/.test(formData.sin)) {
+        newErrors.sin = "SIN must be 9 digits";
+      }
+      
+      if (formData.userType === "parent" && !formData.relationship) {
+        newErrors.relationship = "Please specify relationship";
+      }
+    }
+    
+    // Password validation
     if (!formData.password) {
       newErrors.password = "Password is required";
     } else if (formData.password.length < 6) {
       newErrors.password = "Password must be at least 6 characters";
     }
+    
     if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = "Passwords do not match";
     }
@@ -85,16 +134,29 @@ const SignupPage = () => {
     e.preventDefault();
 
     if (validateForm()) {
-      // Prepare user data
+      // Prepare user data with ID field based on user type
       const userData = {
         userType: formData.userType,
         firstName: formData.firstName,
         lastName: formData.lastName,
         email: formData.email,
-        idNumber: formData.idNumber,
         password: formData.password,
         createdAt: new Date().toISOString(),
       };
+
+      // Add appropriate ID field based on user type
+      if (formData.userType === "student") {
+        userData.idNumber = formData.permanentCode;
+        userData.idType = "permanentCode";
+      } else {
+        userData.idNumber = formData.sin;
+        userData.idType = "sin";
+        if (formData.userType === "parent") {
+          userData.relationship = formData.relationship;
+        } else if (formData.userType === "spouse") {
+          userData.relationship = "spouse";
+        }
+      }
 
       // Save user to local storage
       const success = saveUser(userData);
@@ -108,9 +170,11 @@ const SignupPage = () => {
           firstName: "",
           lastName: "",
           email: "",
-          idNumber: "",
+          permanentCode: "",
+          sin: "",
           password: "",
           confirmPassword: "",
+          relationship: "",
         });
 
         // Redirect to login page after 2 seconds
@@ -119,6 +183,63 @@ const SignupPage = () => {
         }, 2000);
       }
     }
+  };
+
+  // Determine which ID field to show based on user type
+  const renderIdentityField = () => {
+    if (formData.userType === "student") {
+      return (
+        <TextField
+          label="Permanent Code"
+          name="permanentCode"
+          value={formData.permanentCode}
+          onChange={handleChange}
+          placeholder="e.g., ABCD12345678"
+          size="small"
+          fullWidth
+          sx={{ mb: 2 }}
+          error={!!errors.permanentCode}
+          helperText={errors.permanentCode}
+          inputProps={{ style: { textTransform: 'uppercase' } }}
+        />
+      );
+    } else if (formData.userType === "parent" || formData.userType === "spouse") {
+      return (
+        <>
+          <TextField
+            label="Social Insurance Number"
+            name="sin"
+            value={formData.sin}
+            onChange={handleChange}
+            placeholder="e.g., 123456789"
+            size="small"
+            fullWidth
+            sx={{ mb: 2 }}
+            error={!!errors.sin}
+            helperText={errors.sin}
+          />
+          
+          {formData.userType === "parent" && (
+            <FormControl fullWidth sx={{ mb: 2 }} size="small" error={!!errors.relationship}>
+              <InputLabel>Relationship to Student</InputLabel>
+              <Select
+                name="relationship"
+                value={formData.relationship}
+                onChange={handleChange}
+                label="Relationship to Student"
+              >
+                <MenuItem value="parent">Parent</MenuItem>
+                <MenuItem value="guardian">Legal Guardian</MenuItem>
+              </Select>
+              {errors.relationship && (
+                <FormHelperText>{errors.relationship}</FormHelperText>
+              )}
+            </FormControl>
+          )}
+        </>
+      );
+    }
+    return null;
   };
 
   return (
@@ -145,6 +266,7 @@ const SignupPage = () => {
             sx={{ mb: 2 }}
             size="small"
             error={!!errors.userType}
+            required
           >
             <InputLabel id="user-type-label">User Type</InputLabel>
             <Select
@@ -157,10 +279,11 @@ const SignupPage = () => {
             >
               <MenuItem value="student">Student</MenuItem>
               <MenuItem value="parent">Parent</MenuItem>
+              <MenuItem value="spouse">Spouse</MenuItem>
               <MenuItem value="advisor">Advisor</MenuItem>
             </Select>
             {errors.userType && (
-              <span className="text-red-500 text-xs">{errors.userType}</span>
+              <FormHelperText>{errors.userType}</FormHelperText>
             )}
           </FormControl>
 
@@ -175,6 +298,7 @@ const SignupPage = () => {
             sx={{ mb: 2 }}
             error={!!errors.firstName}
             helperText={errors.firstName}
+            required
           />
 
           <TextField
@@ -188,6 +312,7 @@ const SignupPage = () => {
             sx={{ mb: 2 }}
             error={!!errors.lastName}
             helperText={errors.lastName}
+            required
           />
 
           <TextField
@@ -202,20 +327,11 @@ const SignupPage = () => {
             sx={{ mb: 2 }}
             error={!!errors.email}
             helperText={errors.email}
+            required
           />
 
-          <TextField
-            label="Permanent Code / Social Insurance Number"
-            name="idNumber"
-            value={formData.idNumber}
-            onChange={handleChange}
-            placeholder="Enter your number"
-            size="small"
-            fullWidth
-            sx={{ mb: 2 }}
-            error={!!errors.idNumber}
-            helperText={errors.idNumber}
-          />
+          {/* Conditional identity field based on user type */}
+          {renderIdentityField()}
 
           <TextField
             label="Password"
@@ -229,6 +345,7 @@ const SignupPage = () => {
             sx={{ mb: 2 }}
             error={!!errors.password}
             helperText={errors.password}
+            required
           />
 
           <TextField
@@ -243,6 +360,7 @@ const SignupPage = () => {
             sx={{ mb: 3 }}
             error={!!errors.confirmPassword}
             helperText={errors.confirmPassword}
+            required
           />
 
           <Button variant="contained" fullWidth type="submit" sx={{ mb: 2 }}>
