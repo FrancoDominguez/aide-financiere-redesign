@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import TextField from "@mui/material/TextField";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
@@ -7,11 +7,6 @@ import FormControl from "@mui/material/FormControl";
 import { Button } from "@mui/material";
 
 const LoginPage = () => {
-  const [age, setAge] = useState("");
-
-  const handleChange = (event) => {
-    setAge(event.target.value);
-  };
   return (
     <main className="flex-grow container mx-auto p-6 bg-white rounded-lg shadow-md flex items-center justify-center">
       <div className="flex flex-col space-y-4 w-full">
@@ -21,7 +16,6 @@ const LoginPage = () => {
           <Select
             labelId="demo-select-small-label"
             id="demo-select-small"
-            onChange={handleChange}
             sx={{ mb: 5 }}
           >
             <MenuItem value="">
@@ -61,3 +55,5 @@ const LoginPage = () => {
     </main>
   );
 };
+
+export default LoginPage;
