@@ -44,9 +44,10 @@ function MyAccountPage() {
         variant="text"
         sx={{
           width: "100%",
-          borderColor: "lightgray",
+          borderRadius: "12px",
+          overflow: "hidden",
           "& .MuiButtonGroup-grouped:not(:last-of-type)": {
-            borderBottom: "1px solid lightgray",
+            borderBottom: "1px solid darkgrey",
           },
         }}
       >
